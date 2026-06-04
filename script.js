@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: 3, name: "Product 3", price: 59.999 },
   ];
 
-  const cart = [];
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   const productList = document.getElementById("product-list");
   const cartItems = document.getElementById("cart-items");
@@ -32,13 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
   function addToCart(product) {
     cart.push(product);
+    saveCart();
     renderCart();
-  }
+}
 
   function renderCart() {
-    cartItems.innerText = "";
+    cartItems.innerHTML = "";
     let totalPrice = 0;
 
     if (cart.length > 0) {
@@ -55,13 +60,22 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } else {
       emptyCartMessage.classList.remove("hidden");
+      cartTotalMessage.classList.add("hidden");
       totalPriceDisplay.textContent = `$0.00`;
     }
   }
 
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+
   checkOutBtn.addEventListener("click", () => {
     cart.length = 0;
+    saveCart();
     alert("Checkout successfully");
     renderCart();
   });
+
+  renderCart();
 });
