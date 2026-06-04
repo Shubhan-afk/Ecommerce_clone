@@ -52,8 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
       cart.forEach((item, index) => {
         totalPrice += item.price;
         const cartItem = document.createElement("div");
+        cartItem.classList.add("cartProduct");
         cartItem.innerHTML = `
-        ${item.name} - $${item.price.toFixed(2)}
+       <span>${item.name} - $${item.price.toFixed(2)}</span>
+       <button data-id="${item.id}">Remove</button>
         `;
         cartItems.appendChild(cartItem);
         totalPriceDisplay.textContent = `${totalPrice.toFixed(2)}`;
@@ -62,6 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
       emptyCartMessage.classList.remove("hidden");
       cartTotalMessage.classList.add("hidden");
       totalPriceDisplay.textContent = `$0.00`;
+    }
+  }
+
+  cartItems.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+      const cartItemId = parseInt(e.target.getAttribute("data-id"));
+      removeItem(cartItemId);
+    }
+  });
+
+  function removeItem(id) {
+    const index = cart.findIndex((item) => item.id === id);
+    if (index !== -1) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+      
     }
   }
 
